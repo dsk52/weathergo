@@ -22,6 +22,7 @@ type OpenWeatherMapAPIResponse struct {
 	Coord   Coord     `json: "coord"`
 	Wind    Wind      `json: "wind"`
 	Dt      int64     `json: "dt"`
+	Name    string    `json: "name"`
 }
 
 type Coord struct {
@@ -73,15 +74,19 @@ func main() {
 		panic(err)
 	}
 
-	fmt.Println(string(bytes))
+	// fmt.Println(string(bytes))
 
 	var apiRes OpenWeatherMapAPIResponse
 	if err := json.Unmarshal(bytes, &apiRes); err != nil {
 		panic(err)
 	}
 
-	fmt.Printf("天気 %s", apiRes.Weather[0].Main)
-	fmt.Printf("気温 %f", apiRes.Main.Temp)
-	fmt.Printf("最高 %f", apiRes.Main.TempMax)
-	fmt.Printf("最高 %f", apiRes.Main.TempMin)
+	fmt.Printf("地域名 %s\n", apiRes.Name)
+	fmt.Printf("天気 %s %s\n", apiRes.Weather[0].Main, apiRes.Weather[0].Description)
+	fmt.Printf("気温 %.1f\n", apiRes.Main.Temp)
+	fmt.Printf("体感気温 %.1f\n", apiRes.Main.FeelsLike)
+	fmt.Printf("湿度 %d\n", apiRes.Main.Humidity)
+
+	fmt.Printf("最高 %.1f\n", apiRes.Main.TempMax)
+	fmt.Printf("最低 %.1f\n", apiRes.Main.TempMin)
 }
